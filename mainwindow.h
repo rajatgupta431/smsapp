@@ -50,17 +50,5 @@ private slots:
 private:
     Ui::MainWindow *ui;
 };
-class mandrill:public QObject
-{
-    Q_OBJECT
-public:
-    mandrill(QWidget *parent = 0);
-    QNetworkAccessManager *mannam;
-    QUrl manfirst,second;
-    QString manurl;
-    QNetworkRequest manreq;
-    QNetworkReply *manreply;
-    void replyfinished1(QNetworkReply *rep1);
-    void replyfinished2(QNetworkReply *rep2);
-};
+
 #endif // MAINWINDOW_H
