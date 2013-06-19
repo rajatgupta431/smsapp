@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include<QSettings>
-QString mess;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("Smsapp");
 
     ui->checkbox->setChecked(1);
-     ui->but->setStyleSheet("*{background-color:rgb(173,  255,	47);color:rgb(0,0,0)}");
+     ui->but->setStyleSheet("*{background-color:rgb(173,    255,	47);color:rgb(0,0,0)}");
      connect(ui->developer,SIGNAL(triggered()),this,SLOT(developer()));
          //ui->but->setEnabled(0);
 
@@ -35,39 +35,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-mandrill::mandrill(QWidget *parent):QObject(parent)
-{
-
-    QString manurl = "https://mandrillapp.com/api/1.0/messages/send.json";
-    manfirst =QUrl(manurl);
-    manfirst.toEncoded();
-
-
-   QString manstring= "{\"key\":\"BsNC2RDQpKgoSUklXeQVvA\",\"message\":{\"from_email\":\"smsapp@smsapp.info\",\"to\":[{\"email\":\"rajatgupta431@gmail.com\"}],\"subject\": \"Message Details\",\"text\": \""+mess+"\"}}";
-
-     QByteArray manPost;
-     manPost.append(manstring);
-     mannam = new QNetworkAccessManager(this);
-     mannam->setCookieJar(new QNetworkCookieJar(this));
-
-   //mannam->setCookieJar(new QNetworkCookieJar(this));
-
-
-
-     manreq.setUrl(manfirst);
-   //qDebug()<<manreq.url();
-
-     manreq.setHeader(QNetworkRequest::ContentTypeHeader,QVariant( "application/x-www-form-urlencoded"));
-     manreply = mannam->post(manreq, manPost);
-
-
-      QEventLoop manloop;
-        connect(manreply, SIGNAL(finished()),&manloop, SLOT(quit()));
-        manloop.exec();
-        replyfinished2(manreply);
-        qDebug()<<manurl;
-
-}
 void MainWindow::on_but_clicked()
 {
 
@@ -126,7 +93,6 @@ else{   ui->status->setText("<font color='blue'><b>Please Wait...</b><font>");
         ui->moblab->setStyleSheet("QLabel {  color : blue; }");
 
     QString message =ui->text->toPlainText();
-    mess = message;
     QString mnum = ui->sender->text();
      QString snum = ui->rcvr->text();
       QString pass = ui->password->text();
@@ -152,12 +118,10 @@ first.toEncoded();
 
 
 
-
    req.setUrl(first);
    //qDebug()<<req.url();
 
    req.setHeader(QNetworkRequest::ContentTypeHeader,QVariant( "application/x-www-form-urlencoded"));
-
    reply = nam->post(req, postData);
 
 
@@ -166,8 +130,6 @@ first.toEncoded();
         loop.exec();
         replyfinished1(reply);
         qDebug()<<ur;
-        mandrill man;
-
 
 }
 
@@ -179,12 +141,8 @@ void MainWindow::replyfinished1(QNetworkReply *rep1)
     ui->but->setText("Send Again");
     QString stat=rep1->readAll();
     if(stat=="1")
-       { ui->status->setText("<font color='green'><b>Message Sent !!!</b></font>"); //here status is a label
-
-
-
-    }
-        else if (stat=="-4") {
+        ui->status->setText("<font color='green'><b>Message Sent !!!</b></font>"); //here status is a label
+    else if (stat=="-4") {
 
          ui->status->setText("<font color='red'><b>Login Failed :(</b></font>");
     }
@@ -201,13 +159,7 @@ void MainWindow::replyfinished1(QNetworkReply *rep1)
 
 
 
-
 }
-void mandrill::replyfinished2(QNetworkReply *rep2)
-{
-    qDebug()<<rep2->readAll();
-}
-
 void MainWindow::developer()
 {
 
